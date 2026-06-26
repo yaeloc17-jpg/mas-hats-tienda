@@ -51,7 +51,7 @@
             <form onsubmit="procesarRegistro(event)">
                 <div class="campo">
                     <label>Nombre Completo:</label>
-                    <input type="text" id="regNombre" required placeholder="Tu Nombre">
+                    <input type="text" id="regNombre" required placeholder="">
                 </div>
                 <div class="campo">
                     <label>Correo Electrónico:</label>
@@ -144,7 +144,7 @@
 
                         // Retraso de 1.2 segundos para simular respuesta del servidor
                         setTimeout(() => {
-                            window.location.href = "catalogo.jsp";
+                            window.location.href = "catalogo.html";
                         }, 1200);
                         return;
                     }
