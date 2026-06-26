@@ -311,28 +311,75 @@
                     opacity: 1;
                 }
             }
+            header {
+        background-color: var(--negro-pro);
+        color: var(--blanco);
+        padding: 1rem 5%;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        flex-wrap: wrap; 
+    }
+
+    .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        letter-spacing: 2px;
+        color: var(--dorado);
+        text-transform: uppercase;
+        margin-bottom: 10px; 
+    }
+
+    nav ul {
+        list-style: none;
+        display: flex;
+        margin: 0;
+        padding: 0;
+        flex-wrap: wrap; 
+        justify-content: center;
+        gap: 15px;
+    }
+
+ 
+    @media (max-width: 768px) {
+        header {
+            flex-direction: column; 
+            padding: 15px;
+        }
+
+        nav ul li a {
+            font-size: 0.8rem; 
+        }
+        
+        .hero h1 {
+            font-size: 2rem; 
+        }
+    }
         </style>
     </head>
     <body>
 
-        <header>
-            <div class="logo">Mavs Hats</div>
-            <nav>
-                <ul>
-                    <li><a onclick="filtrar('todas')">Todas</a></li>
-                    <li><a onclick="filtrar('casual')">Casual</a></li>
-                    <li><a onclick="filtrar('deportiva')">Deportiva</a></li>
-                    <li><a onclick="filtrar('basquetbol')">Basquetbol</a></li>
-                    <li><a onclick="filtrar('beisbol')">Beisbol</a></li>
-                    <li>
-                        <a href="login.jsp" style="color: var(--dorado); text-decoration: none;">Salir</a>
-                        <a id="boton-carrito" href="#" style="background-color: #c5a059; color: #1a1a1a; padding: 5px 12px; font-weight: bold; border-radius: 4px; text-decoration: none; margin-left: 15px;">
-                            🛒 Carrito (<span id="contador-carrito">0</span>)
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </header>
+<header>
+    <div class="logo">Mavs Hats</div>
+    <nav>
+        <ul>
+            <li><a onclick="filtrar('todas')">Todas</a></li>
+            <li><a onclick="filtrar('casual')">Casual</a></li>
+            <li><a onclick="filtrar('deportiva')">Deportiva</a></li>
+            <li><a onclick="filtrar('basquetbol')">Basquetbol</a></li>
+            <li><a onclick="filtrar('beisbol')">Beisbol</a></li>
+            <li>
+                <a id="boton-carrito" href="#" style="background-color: #c5a059; color: #1a1a1a; padding: 5px 12px; font-weight: bold; border-radius: 4px; text-decoration: none;">
+                    🛒 (<span id="contador-carrito">0</span>)
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
 
         <section class="hero">
             <h1>MAVS HATS</h1>
