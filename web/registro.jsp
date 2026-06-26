@@ -1,0 +1,155 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mavs Hats | Crear Cuenta</title>
+        <style>
+            /* --- VARIABLES DE DISEÑO PREMIUM --- */
+            :root {
+                --negro-pro: #1a1a1a;
+                --negro-suave: #2d2d2d;
+                --dorado: #c5a059;
+                --dorado-hover: #e0b973;
+                --gris-claro: #f4f4f4;
+                --blanco: #ffffff;
+            }
+
+            body {
+                font-family: 'Poppins', sans-serif;
+                margin: 0;
+                background-color: var(--gris-claro);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+
+            /* --- CONTENEDOR DEL FORMULARIO --- */
+            .registro-container {
+                background-color: var(--blanco);
+                padding: 40px;
+                width: 100%;
+                max-width: 400px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+                border-top: 5px solid var(--dorado); /* Detalle elegante arriba */
+                text-align: center;
+            }
+
+            .logo {
+                font-size: 2rem;
+                font-weight: bold;
+                letter-spacing: 3px;
+                color: var(--negro-pro);
+                margin-bottom: 5px;
+                text-transform: uppercase;
+            }
+
+            .subtitulo {
+                color: #777;
+                font-size: 0.9rem;
+                margin-bottom: 30px;
+            }
+
+            /* --- ESTILO DE LOS CAMPOS --- */
+            .input-group {
+                margin-bottom: 20px;
+                text-align: left;
+            }
+
+            .input-group label {
+                display: block;
+                font-size: 0.85rem;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                color: var(--negro-suave);
+                margin-bottom: 8px;
+                font-weight: 600;
+            }
+
+            .input-group input {
+                width: 100%;
+                padding: 12px;
+                box-sizing: border-box;
+                border: 1px solid #ccc;
+                font-size: 1rem;
+                background-color: #fafafa;
+                transition: all 0.3s;
+            }
+
+            .input-group input:focus {
+                border-color: var(--dorado);
+                background-color: var(--blanco);
+                outline: none;
+            }
+
+            /* --- BOTÓN DE ACCIÓN --- */
+            .btn-registrar {
+                background-color: var(--negro-pro);
+                color: var(--blanco);
+                border: none;
+                padding: 14px;
+                width: 100%;
+                font-size: 1rem;
+                font-weight: bold;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+                margin-top: 10px;
+            }
+
+            .btn-registrar:hover {
+                background-color: var(--dorado);
+                color: var(--negro-pro);
+            }
+
+            /* --- ENLACES --- */
+            .enlace-login {
+                margin-top: 25px;
+                font-size: 0.9rem;
+                color: #555;
+            }
+
+            .enlace-login a {
+                color: var(--dorado);
+                text-decoration: none;
+                font-weight: bold;
+                transition: color 0.3s;
+            }
+
+            .enlace-login a:hover {
+                color: var(--negro-pro);
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="registro-container">
+            <div class="logo">Mavs Hats</div>
+            <div class="subtitulo">Únete al club de las gorras premium</div>
+
+            <form action="RegistrarUsuarioServlet" method="POST">
+
+                <div class="input-group">
+                    <label for="correo">Correo Electrónico</label>
+                    <input type="email" id="correo" name="txtCorreo" placeholder="correo@ejemplo.com" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="txtPassword" placeholder="Crea una contraseña" required>
+                </div>
+
+                <button type="submit" class="btn-registrar">Crear Cuenta</button>
+            </form>
+
+            <div class="enlace-login">
+                ¿Ya tienes una cuenta? <a href="login.jsp">Inicia sesión aquí</a>
+            </div>
+        </div>
+
+    </body>
+</html>

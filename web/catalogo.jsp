@@ -1,0 +1,957 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mavs Hats | Tienda Oficial</title>
+        <style>
+            /* --- VARIABLES DE DISEÑO --- */
+            :root {
+                --negro-pro: #1a1a1a;
+                --dorado: #c5a059;
+                --gris-claro: #f4f4f4;
+                --blanco: #ffffff;
+                --exito: #27ae60;
+            }
+
+            body {
+                font-family: 'Poppins', sans-serif;
+                margin: 0;
+                background-color: var(--gris-claro);
+                color: var(--negro-pro);
+            }
+
+            /* --- NAVBAR PROFESIONAL --- */
+            header {
+                background-color: var(--negro-pro);
+                color: var(--blanco);
+                padding: 1rem 5%;
+                position: sticky;
+                top: 0;
+                z-index: 1000;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            }
+
+            .logo {
+                font-size: 1.5rem;
+                font-weight: bold;
+                letter-spacing: 2px;
+                color: var(--dorado);
+                text-transform: uppercase;
+            }
+
+            nav ul {
+                list-style: none;
+                display: flex;
+                margin: 0;
+                padding: 0;
+            }
+
+            nav ul li {
+                margin-left: 20px;
+            }
+
+            nav ul li a {
+                color: var(--blanco);
+                text-decoration: none;
+                font-size: 0.9rem;
+                text-transform: uppercase;
+                transition: color 0.3s;
+                cursor: pointer;
+            }
+
+            nav ul li a:hover {
+                color: var(--dorado);
+            }
+
+            /* --- BANNER PRINCIPAL --- */
+            .hero {
+                background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                    url('https://images.unsplash.com/photo-1556306535-0f09a537f0a3?q=80&w=1200');
+                background-size: cover;
+                background-position: center;
+                height: 300px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                color: var(--blanco);
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+                margin: 0;
+                letter-spacing: 5px;
+            }
+            .hero p {
+                font-size: 1.2rem;
+                color: var(--dorado);
+            }
+
+            /* --- CONTENEDOR DE PRODUCTOS --- */
+            .tienda-container {
+                max-width: 1200px;
+                margin: 40px auto;
+                padding: 0 20px;
+            }
+
+            .titulo-categoria {
+                border-bottom: 2px solid var(--dorado);
+                display: inline-block;
+                margin-bottom: 30px;
+                padding-bottom: 5px;
+                font-size: 1.5rem;
+                text-transform: uppercase;
+            }
+
+            .grid-productos {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                gap: 30px;
+            }
+
+            /* --- CARDS ESTILO PREMIUM --- */
+            .card {
+                background: var(--blanco);
+                border-radius: 0;
+                overflow: hidden;
+                transition: 0.4s;
+                position: relative;
+                border: 1px solid #ddd;
+            }
+
+            .card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            }
+
+            .card img {
+                width: 100%;
+                height: 280px;
+                object-fit: cover;
+            }
+
+            .card-body {
+                padding: 20px;
+                text-align: center;
+            }
+
+            .card-categoria {
+                font-size: 0.7rem;
+                color: #888;
+                text-transform: uppercase;
+                margin-bottom: 10px;
+                display: block;
+            }
+
+            .card-titulo {
+                font-size: 1.1rem;
+                font-weight: 600;
+                margin: 10px 0;
+            }
+
+            .card-precio {
+                font-size: 1.3rem;
+                font-weight: bold;
+                color: var(--negro-pro);
+                margin-bottom: 15px;
+            }
+
+            .btn-comprar {
+                background-color: var(--negro-pro);
+                color: var(--blanco);
+                padding: 12px 25px;
+                border: none;
+                width: 100%;
+                cursor: pointer;
+                font-weight: bold;
+                text-transform: uppercase;
+                transition: 0.3s;
+            }
+
+            .btn-comprar:hover {
+                background-color: var(--dorado);
+                color: var(--negro-pro);
+            }
+
+            /* --- PIE DE PÁGINA --- */
+            footer {
+                background: var(--negro-pro);
+                color: #666;
+                text-align: center;
+                padding: 40px 0;
+                margin-top: 60px;
+            }
+
+            /* Clase para filtrar */
+            .hidden {
+                display: none !important;
+            }
+
+            /* --- VENTANA FLOTANTE DEL CARRITO (MODAL) --- */
+            .modal-carrito {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.7);
+                z-index: 2000;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .contenido-carrito {
+                background-color: var(--blanco);
+                width: 90%;
+                max-width: 500px;
+                padding: 30px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+                position: relative;
+                border: 2px solid var(--dorado);
+            }
+
+            .cerrar-carrito {
+                position: absolute;
+                top: 15px;
+                right: 20px;
+                font-size: 1.5rem;
+                cursor: pointer;
+                color: var(--negro-pro);
+                font-weight: bold;
+            }
+
+            .lista-items-carrito {
+                max-height: 250px;
+                overflow-y: auto;
+                margin: 20px 0;
+                padding: 0;
+                list-style: none;
+            }
+
+            .item-carrito {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 0;
+                border-bottom: 1px solid #ddd;
+                font-size: 1rem;
+            }
+
+            .total-seccion {
+                font-size: 1.3rem;
+                font-weight: bold;
+                text-align: right;
+                margin-top: 15px;
+                border-top: 2px solid var(--negro-pro);
+                padding-top: 10px;
+            }
+
+            .botones-carrito-acciones {
+                display: flex;
+                gap: 15px;
+                margin-top: 20px;
+            }
+
+            .btn-vaciar {
+                background-color: #e74c3c;
+                color: white;
+                border: none;
+                padding: 10px;
+                width: 40%;
+                cursor: pointer;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            .btn-pagar {
+                background-color: var(--exito);
+                color: white;
+                border: none;
+                padding: 10px;
+                width: 60%;
+                cursor: pointer;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+            .badge-stock {
+                display: inline-block;
+                padding: 3px 8px;
+                font-size: 0.75rem;
+                font-weight: bold;
+                border-radius: 3px;
+                margin-bottom: 8px;
+            }
+            .stock-disponible {
+                background-color: #e8f8f5;
+                color: #27ae60;
+            }
+            .stock-critico {
+                background-color: #fdedec;
+                color: #e74c3c;
+                animation: pulse 1.5s infinite;
+            }
+            .stock-agotado {
+                background-color: #f2f4f4;
+                color: #7f8c8d;
+            }
+
+            @keyframes pulse {
+                0% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.6;
+                }
+                100% {
+                    opacity: 1;
+                }
+            }
+        </style>
+    </head>
+    <body>
+
+        <header>
+            <div class="logo">Mavs Hats</div>
+            <nav>
+                <ul>
+                    <li><a onclick="filtrar('todas')">Todas</a></li>
+                    <li><a onclick="filtrar('casual')">Casual</a></li>
+                    <li><a onclick="filtrar('deportiva')">Deportiva</a></li>
+                    <li><a onclick="filtrar('basquetbol')">Basquetbol</a></li>
+                    <li><a onclick="filtrar('beisbol')">Beisbol</a></li>
+                    <li>
+                        <a href="login.jsp" style="color: var(--dorado); text-decoration: none;">Salir</a>
+                        <a id="boton-carrito" href="#" style="background-color: #c5a059; color: #1a1a1a; padding: 5px 12px; font-weight: bold; border-radius: 4px; text-decoration: none; margin-left: 15px;">
+                            🛒 Carrito (<span id="contador-carrito">0</span>)
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <h1>MAVS HATS</h1>
+            <p>Elegancia y Deporte en tu Cabeza</p>
+        </section>
+
+        <div class="tienda-container">
+            <h2 class="titulo-categoria" id="nombre-categoria">Todas las Gorras</h2>
+
+            <div class="grid-productos" id="grid">
+
+                <div class="card" id="card-gorra1">
+                    <img src="img/lakers.jpeg" alt="Basquetbol">
+                    <div class="card-body">
+                        <span id="badge-gorra1" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Basquetbol</span>
+                        <h3 class="card-titulo">LAKERS MORADA</h3>
+                        <div class="card-precio">$1000.00</div>
+                        <button id="btn-gorra1" class="btn-comprar" onclick="agregarAlCarrito('gorra1', 'LAKERS MORADA', 1000)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra2">
+                    <img src="img/bulls.jpeg" alt="Basquetbol">
+                    <div class="card-body">
+                        <span id="badge-gorra2" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Basquetbol</span>
+                        <h3 class="card-titulo">CHICAGO BULLS ROJA</h3>
+                        <div class="card-precio">$600.00</div>
+                        <button id="btn-gorra2" class="btn-comprar" onclick="agregarAlCarrito('gorra2', 'CHICAGO BULLS ROJA', 600)">Agregar al Carrito</button> 
+                    </div>
+                </div>
+                <div class="card" id="card-gorra3">
+                    <img src="img/denver.jpeg" alt="Basquetbol">
+                    <div class="card-body">
+                        <span id="badge-gorra3" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Basquetbol</span>
+                        <h3 class="card-titulo">DENVER Nuggets Azul</h3>
+                        <div class="card-precio">$720.00</div>
+                        <button id="btn-gorra3" class="btn-comprar" onclick="agregarAlCarrito('gorra3', 'DENVER Nuggets Azul', 720)">Agregar al Carrito</button> 
+                    </div>
+                </div>
+                <div class="card" id="card-gorra4">
+                    <img src="img/mbes.jpg" alt="Basquetbol">
+                    <div class="card-body">
+                        <span id="badge-gorra4" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Basquetbol</span>
+                        <h3 class="card-titulo">59Fifty Mexico</h3>
+                        <div class="card-precio">$650.00</div>
+                        <button id="btn-gorra4" class="btn-comprar" onclick="agregarAlCarrito('gorra4', '59Fifty Mexico', 650)">Agregar al Carrito</button> 
+                    </div>
+                </div>
+                <div class="card" id="card-gorra5">
+                    <img src="img/milk.jpeg" alt="Basquetbol">
+                    <div class="card-body">
+                        <span id="badge-gorra5" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Basquetbol</span>
+                        <h3 class="card-titulo">MILKWAUKEE BUCKS</h3>
+                        <div class="card-precio">$1020.00</div>
+                        <button id="btn-gorra5" class="btn-comprar" onclick="agregarAlCarrito('gorra5', 'MILKWAUKEE BUCKS', 1020)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra6">
+                    <img src="img/heat.jpg" alt="Basquetbol">
+                    <div class="card-body">
+                        <span id="badge-gorra6" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Basquetbol</span>
+                        <h3 class="card-titulo">GORRA HEAT</h3>
+                        <div class="card-precio">$400.00</div>
+                        <button id="btn-gorra6" class="btn-comprar" onclick="agregarAlCarrito('gorra6', 'GORRA HEAT', 400)">Agregar al Carrito</button> 
+                    </div>
+                </div>
+                <div class="card" id="card-gorra7">
+                    <img src="img/lak.png" alt="Basquetbol">
+                    <div class="card-body">
+                        <span id="badge-gorra7" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Basquetbol</span>
+                        <h3 class="card-titulo">LAKERS NEGRA</h3>
+                        <div class="card-precio">$799.00</div>
+                        <button id="btn-gorra7" class="btn-comprar" onclick="agregarAlCarrito('gorra7', 'LAKERS NEGRA', 799)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra8">
+                    <img src="img/lalak.jpg" alt="Basquetbol">
+                    <div class="card-body">
+                        <span id="badge-gorra8" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Basquetbol</span>
+                        <h3 class="card-titulo">LAKERS GRIS</h3>
+                        <div class="card-precio">$900.00</div>
+                        <button id="btn-gorra8" class="btn-comprar" onclick="agregarAlCarrito('gorra8', 'LAKERS GRIS', 900)">Agregar al Carrito</button> 
+                    </div>
+                </div>
+                <div class="card" id="card-gorra9">
+                    <img src="img/lakg.jpg" alt="Basquetbol">
+                    <div class="card-body">
+                        <span id="badge-gorra9" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Basquetbol</span>
+                        <h3 class="card-titulo">LAKERS PREMIUM</h3>
+                        <div class="card-precio">$2500.00</div>
+                        <button id="btn-gorra9" class="btn-comprar" onclick="agregarAlCarrito('gorra9', 'LAKERS PREMIUM', 2500)">Agregar al Carrito</button> 
+                    </div>
+                </div>
+                <div class="card" id="card-gorra10">
+                    <img src="img/dp1.jpeg" alt="Deportiva">
+                    <div class="card-body">
+                        <span id="badge-gorra10" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Deportiva</span>
+                        <h3 class="card-titulo">MAVS-HATS GRIS</h3>
+                        <div class="card-precio">$160.00</div>
+                        <button id="btn-gorra10" class="btn-comprar" onclick="agregarAlCarrito('gorra10', 'MAVS-HATS GRIS', 160)">Agregar al Carrito</button> 
+                    </div>
+                </div>
+                <div class="card" id="card-gorra11">
+                    <img src="img/dp2.jpeg" alt="Deportiva">
+                    <div class="card-body">
+                        <span id="badge-gorra11" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Deportiva</span>
+                        <h3 class="card-titulo">MAVS-HATS VERDE</h3>
+                        <div class="card-precio">$150.00</div>
+                        <button id="btn-gorra11" class="btn-comprar" onclick="agregarAlCarrito('gorra11', 'MAVS-HATS VERDE', 150)">Agregar al Carrito</button> 
+                    </div>
+                </div>
+                <div class="card" id="card-gorra12">
+                    <img src="img/dp3.jpeg" alt="Deportiva">
+                    <div class="card-body">
+                        <span id="badge-gorra12" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Deportiva</span>
+                        <h3 class="card-titulo">MAVS-HATS AZUL</h3>
+                        <div class="card-precio">$200.00</div>
+                        <button id="btn-gorra12" class="btn-comprar" onclick="agregarAlCarrito('gorra12', 'MAVS-HATS AZUL', 200)">Agregar al Carrito</button> 
+                    </div>
+                </div>
+                <div class="card" id="card-gorra13">
+                    <img src="img/dp5.jpeg" alt="Deportiva">
+                    <div class="card-body">
+                        <span id="badge-gorra13" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Deportiva</span>
+                        <h3 class="card-titulo">ADIDAS NEGRO</h3>
+                        <div class="card-precio">$220.00</div>
+                        <button id="btn-gorra13" class="btn-comprar" onclick="agregarAlCarrito('gorra13', 'ADIDAS NEGRO', 220)">Agregar al Carrito</button> 
+                    </div>
+                </div>
+                <div class="card" id="card-gorra14">
+                    <img src="img/dp4.jpeg" alt="Deportiva">
+                    <div class="card-body">
+                        <span id="badge-gorra14" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Deportiva</span>
+                        <h3 class="card-titulo">MAVS-HATS BLANCA</h3>
+                        <div class="card-precio">$190.00</div>
+                        <button id="btn-gorra14" class="btn-comprar" onclick="agregarAlCarrito('gorra14', 'MAVS-HATS BLANCA', 190)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra15">
+                    <img src="img/negro.jpeg" alt="Beisbol">
+                    <div class="card-body">
+                        <span id="badge-gorra15" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Beisbol</span>
+                        <h3 class="card-titulo">Los Angeles AZUL</h3>
+                        <div class="card-precio">$800.00</div>
+                        <button id="btn-gorra15" class="btn-comprar" onclick="agregarAlCarrito('gorra15', 'Los Angeles AZUL', 800)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra16">
+                    <img src="img/gorra1.jpg" alt="Beisbol">
+                    <div class="card-body">
+                        <span id="badge-gorra16" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Beisbol</span>
+                        <h3 class="card-titulo">TORONTO BLUES</h3>
+                        <div class="card-precio">$800.00</div>
+                        <button id="btn-gorra16" class="btn-comprar" onclick="agregarAlCarrito('gorra16', 'TORONTO BLUES', 800)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra17">
+                    <img src="img/ny.jpg" alt="Beisbol">
+                    <div class="card-body">
+                        <span id="badge-gorra17" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Beisbol</span>
+                        <h3 class="card-titulo">NEW YORK ROJO</h3>
+                        <div class="card-precio">$700.00</div>
+                        <button id="btn-gorra17" class="btn-comprar" onclick="agregarAlCarrito('gorra17', 'NEW YORK ROJO', 700)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra18">
+                    <img src="img/nyblanca.jpg" alt="Beisbol">
+                    <div class="card-body">
+                        <span id="badge-gorra18" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Beisbol</span>
+                        <h3 class="card-titulo">NEW YORK BLANCA</h3>
+                        <div class="card-precio">$600.00</div>
+                        <button id="btn-gorra18" class="btn-comprar" onclick="agregarAlCarrito('gorra18', 'NEW YORK BLANCA', 600)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra19">
+                    <img src="img/a.jpg" alt="Beisbol">
+                    <div class="card-body">
+                        <span id="badge-gorra19" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Beisbol</span>
+                        <h3 class="card-titulo">GORRA A's ROJO</h3>
+                        <div class="card-precio">$950.00</div>
+                        <button id="btn-gorra19" class="btn-comprar" onclick='agregarAlCarrito("gorra19", "GORRA A&apos;s ROJO", 950)'>Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra20">
+                    <img src="img/chic.jpg" alt="Beisbol">
+                    <div class="card-body">
+                        <span id="badge-gorra20" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Beisbol</span>
+                        <h3 class="card-titulo">San Francisco</h3>
+                        <div class="card-precio">$800.00</div>
+                        <button id="btn-gorra20" class="btn-comprar" onclick="agregarAlCarrito('gorra20', 'San Francisco', 800)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra21">
+                    <img src="img/houston.jpg" alt="Beisbol">
+                    <div class="card-body">
+                        <span id="badge-gorra21" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Beisbol</span>
+                        <h3 class="card-titulo">HOUSTON ASTROS</h3>
+                        <div class="card-precio">$700.00</div>
+                        <button id="btn-gorra21" class="btn-comprar" onclick="agregarAlCarrito('gorra21', 'HOUSTON ASTROS', 700)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra22">
+                    <img src="img/orioles.jpg" alt="Beisbol">
+                    <div class="card-body">
+                        <span id="badge-gorra22" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Beisbol</span>
+                        <h3 class="card-titulo">ORIOLES DE BALTIMORE</h3>
+                        <div class="card-precio">$1000.00</div>
+                        <button id="btn-gorra22" class="btn-comprar" onclick="agregarAlCarrito('gorra22', 'ORIOLES DE BALTIMORE', 1000)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra23">
+                    <img src="img/fully.png" alt="Beisbol">
+                    <div class="card-body">
+                        <span id="badge-gorra23" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Beisbol</span>
+                        <h3 class="card-titulo">FULLY</h3>
+                        <div class="card-precio">$800.00</div>
+                        <button id="btn-gorra23" class="btn-comprar" onclick="agregarAlCarrito('gorra23', 'FULLY', 800)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra24">
+                    <img src="img/LEXUS.jpeg" alt="Casual">
+                    <div class="card-body">
+                        <span id="badge-gorra24" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Casual</span>
+                        <h3 class="card-titulo">LEXUS NEGRO</h3>
+                        <div class="card-precio">$250.00</div>
+                        <button id="btn-gorra24" class="btn-comprar" onclick="agregarAlCarrito('gorra24', 'LEXUS NEGRO', 250)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra25">
+                    <img src="img/2riya.jpeg" alt="Casual">
+                    <div class="card-body">
+                        <span id="badge-gorra25" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Casual</span>
+                        <h3 class="card-titulo">GORRA ANCLA GRIS</h3>
+                        <div class="card-precio">$650.00</div>
+                        <button id="btn-gorra25" class="btn-comprar" onclick="agregarAlCarrito('gorra25', 'GORRA ANCLA', 650)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra26">
+                    <img src="img/casny.jpg" alt="Casual">
+                    <div class="card-body">
+                        <span id="badge-gorra26" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Casual</span>
+                        <h3 class="card-titulo">GORRA NY NEGRO</h3>
+                        <div class="card-precio">$600.00</div>
+                        <button id="btn-gorra26" class="btn-comprar" onclick="agregarAlCarrito('gorra26', 'GORRA NY NEGRO', 600)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra27">
+                    <img src="img/gorrath.jpeg" alt="Casual">
+                    <div class="card-body">
+                        <span id="badge-gorra27" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Casual</span>
+                        <h3 class="card-titulo">GORRA THUNDERHAT</h3>
+                        <div class="card-precio">$750.00</div>
+                        <button id="btn-gorra27" class="btn-comprar" onclick="agregarAlCarrito('gorra27', 'GORRA THUNDERHAT', 750)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra28">
+                    <img src="img/black.jpg" alt="Casual">
+                    <div class="card-body">
+                        <span id="badge-gorra28" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Casual</span>
+                        <h3 class="card-titulo">GORRA BLACK</h3>
+                        <div class="card-precio">$750.00</div>
+                        <button id="btn-gorra28" class="btn-comprar" onclick="agregarAlCarrito('gorra28', 'GORRA BLACK', 200)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra29">
+                    <img src="img/mythical.png" alt="Casual">
+                    <div class="card-body">
+                        <span id="badge-gorra29" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Casual</span>
+                        <h3 class="card-titulo">NEW ERA MYTHICAL</h3>
+                        <div class="card-precio">$1000.00</div>
+                        <button id="btn-gorra29" class="btn-comprar" onclick="agregarAlCarrito('gorra29', 'NEW ERA MYTHICAL', 1000)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra30">
+                    <img src="img/orleans.jpeg" alt="Casual">
+                    <div class="card-body">
+                        <span id="badge-gorra30" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Casual</span>
+                        <h3 class="card-titulo">GORRA THENDERHAT</h3>
+                        <div class="card-precio">$600.00</div>
+                        <button id="btn-gorra30" class="btn-comprar" onclick="agregarAlCarrito('gorra30', 'GORRA ORLEANS BLANCA', 600)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra31">
+                    <img src="img/pizza.png" alt="Casual">
+                    <div class="card-body">
+                        <span id="badge-gorra31" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Casual</span>
+                        <h3 class="card-titulo">PIZZA FELIZ</h3>
+                        <div class="card-precio">$500.00</div>
+                        <button id="btn-gorra31" class="btn-comprar" onclick="agregarAlCarrito('gorra31', 'PIZZA FELIZ', 500)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra32">
+                    <img src="img/sa.png" alt="Casual">
+                    <div class="card-body">
+                        <span id="badge-gorra32" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Casual</span>
+                        <h3 class="card-titulo">GORRA san antonio</h3>
+                        <div class="card-precio">$750.00</div>
+                        <button id="btn-gorra32" class="btn-comprar" onclick="agregarAlCarrito('gorra32', 'GORRA SAN ANTONIO', 750)">Agregar al Carrito</button>
+                    </div>
+                </div>
+                <div class="card" id="card-gorra33">
+                    <img src="img/syna.png" alt="Casual">
+                    <div class="card-body">
+                        <span id="badge-gorra33" class="badge-stock stock-disponible">Disponibles: 20</span>
+                        <span class="card-categoria">Casual</span>
+                        <h3 class="card-titulo">GORRA syna</h3>
+                        <div class="card-precio">$600.00</div>
+                        <button id="btn-gorra33" class="btn-comprar" onclick="agregarAlCarrito('gorra33', 'GORRA Syna', 600)">Agregar al Carrito</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="mi-carrito-modal" class="modal-carrito">
+            <div class="contenido-carrito">
+                <span class="cerrar-carrito" onclick="cerrarCarrito()">&times;</span>
+                <h2 style="margin-top: 0; border-bottom: 2px solid var(--dorado); padding-bottom: 10px;">🛒 Tu Carrito</h2>
+
+                <ul id="lista-items" class="lista-items-carrito"></ul>
+
+                <div class="total-seccion">
+                    Total: <span id="precio-total">$0.00</span>
+                </div>
+
+                <div class="botones-carrito-acciones">
+                    <button class="btn-vaciar" onclick="vaciarCarrito()">Vaciar</button>
+                    <button class="btn-pagar" onclick="finalizarCompra()">Pagar</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            &copy; 2026 Mavs Hats S.A. de C.V. | Calidad Premium
+        </footer>
+
+        <script>
+            // 1. INICIALIZAR EL INVENTARIO AHORA PARA LAS 24 GORRAS COMPLETAS
+            if (!localStorage.getItem("inventarioMavs")) {
+                const stockInicial = {};
+                for (let i = 1; i <= 34; i++) {
+                    stockInicial["gorra" + i] = 20;
+                }
+                localStorage.setItem("inventarioMavs", JSON.stringify(stockInicial));
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+                actualizarContadorInterfaz();
+                actualizarVisibilidadStock();
+
+                const botonMenu = document.getElementById("boton-carrito");
+                if (botonMenu) {
+                    botonMenu.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        abrirCarrito();
+                    });
+                }
+            });
+
+            // 2. AGREGAR AL CARRITO (TOTALMENTE BLINDADA PARA LAS 33 GORRAS)
+            function agregarAlCarrito(idGorra, nombreProducto, precio) {
+                let inventario = JSON.parse(localStorage.getItem("inventarioMavs"));
+
+                // --- PARCHE MÁGICO: Si el inventario existe pero le falta esta gorra nueva, agrégala con 20 de stock de inmediato
+                if (inventario && inventario[idGorra] === undefined) {
+                    inventario[idGorra] = 20;
+                    localStorage.setItem("inventarioMavs", JSON.stringify(inventario));
+                }
+
+                if (!inventario || inventario[idGorra] === undefined) {
+                    alert("Error: No se encontró el stock para el producto " + idGorra);
+                    return;
+                }
+
+                if (inventario[idGorra] <= 0) {
+                    alert("Lo sentimos, el modelo " + nombreProducto + " se encuentra agotado.");
+                    return;
+                }
+
+                // Restar stock
+                inventario[idGorra] -= 1;
+                localStorage.setItem("inventarioMavs", JSON.stringify(inventario));
+
+                // Guardar en carrito
+                let carrito = JSON.parse(localStorage.getItem("carritoMavs")) || [];
+                carrito.push({id: idGorra, nombre: nombreProducto, precio: precio});
+                localStorage.setItem("carritoMavs", JSON.stringify(carrito));
+
+                // Actualizar interfaz
+                actualizarContadorInterfaz();
+                actualizarVisibilidadStock();
+
+                alert("¡Añadido! " + nombreProducto + " listo en tu carrito.");
+            }
+
+            // 3. MOSTRAR STOCK SEGURO SIN AFECTAR LOS FILTROS
+            function actualizarVisibilidadStock() {
+                let inventario = JSON.parse(localStorage.getItem("inventarioMavs"));
+                if (!inventario)
+                    return;
+
+                for (let id in inventario) {
+                    const badge = document.getElementById("badge-" + id);
+                    const boton = document.getElementById("btn-" + id);
+                    const cant = inventario[id];
+
+                    // Si la categoría ocultó la tarjeta o no existe el ID, no rompemos el bucle
+                    if (!badge || !boton)
+                        continue;
+
+                    if (cant === 0) {
+                        badge.innerText = "Agotado";
+                        badge.className = "badge-stock stock-agotado";
+                        boton.innerText = "Agotado";
+                        boton.disabled = true;
+                        boton.style.backgroundColor = "#7f8c8d";
+                    } else if (cant <= 5) {
+                        badge.innerText = "¡Últimas " + cant + " unidades!";
+                        badge.className = "badge-stock stock-critico";
+                        boton.disabled = false;
+                        boton.innerText = "Agregar al Carrito";
+                        boton.style.backgroundColor = "";
+                    } else {
+                        badge.innerText = "Disponibles: " + cant;
+                        badge.className = "badge-stock stock-disponible";
+                        boton.disabled = false;
+                        boton.innerText = "Agregar al Carrito";
+                        boton.style.backgroundColor = "";
+                    }
+                }
+            }
+
+            // 4. FUNCIÓN PARA FILTRAR CATEGORÍAS (REPARADA)
+            function filtrar(categoria) {
+                const tarjetas = document.querySelectorAll(".grid-productos .card");
+                const tituloCategoria = document.getElementById("nombre-categoria");
+
+                if (categoria === 'todas') {
+                    tituloCategoria.innerText = "Todas las Gorras";
+                } else {
+                    tituloCategoria.innerText = "Gorras " + categoria;
+                }
+
+                tarjetas.forEach(tarjeta => {
+                    const catTexto = tarjeta.querySelector(".card-categoria").innerText.toLowerCase().trim();
+
+                    if (categoria === "todas" || catTexto === categoria) {
+                        tarjeta.classList.remove("hidden");
+                    } else {
+                        tarjeta.classList.add("hidden");
+                    }
+                });
+
+                // Reaplica los estilos de stocks sobre los elementos que quedaron visibles
+                actualizarVisibilidadStock();
+            }
+
+            function actualizarContadorInterfaz() {
+                let carrito = JSON.parse(localStorage.getItem("carritoMavs")) || [];
+                const contador = document.getElementById("contador-carrito");
+                if (contador)
+                    contador.innerText = carrito.length;
+            }
+
+            function abrirCarrito() {
+                const modal = document.getElementById("mi-carrito-modal");
+                const listaUl = document.getElementById("lista-items");
+                const totalSpan = document.getElementById("precio-total");
+
+                let carrito = JSON.parse(localStorage.getItem("carritoMavs")) || [];
+                listaUl.innerHTML = "";
+                let totalCuenta = 0;
+
+                if (carrito.length === 0) {
+                    listaUl.innerHTML = "<li style='text-align:center; color:#888; padding: 20px;'>El carrito está vacío.</li>";
+                } else {
+                    carrito.forEach(item => {
+                        const li = document.createElement("li");
+                        li.className = "item-carrito";
+                        li.innerHTML = "<span>" + item.nombre + "</span><strong>$" + item.precio + ".00</strong>";
+                        listaUl.appendChild(li);
+                        totalCuenta += item.precio;
+                    });
+                }
+
+                totalSpan.innerText = "$" + totalCuenta + ".00";
+                modal.style.display = "flex";
+            }
+
+            document.getElementById("mi-carrito-modal").addEventListener("click", function (e) {
+                if (e.target === this)
+                    cerrarCarrito();
+            });
+
+            function cerrarCarrito() {
+                document.getElementById("mi-carrito-modal").style.display = "none";
+            }
+
+            function vaciarCarrito() {
+                if (confirm("¿Seguro que quieres vaciar el carrito?")) {
+                    let carrito = JSON.parse(localStorage.getItem("carritoMavs")) || [];
+                    let inventario = JSON.parse(localStorage.getItem("inventarioMavs"));
+
+                    carrito.forEach(item => {
+                        if (inventario[item.id] !== undefined) {
+                            inventario[item.id] += 1;
+                        }
+                    });
+
+                    localStorage.setItem("inventarioMavs", JSON.stringify(inventario));
+                    localStorage.removeItem("carritoMavs");
+
+                    actualizarContadorInterfaz();
+                    actualizarVisibilidadStock();
+                    abrirCarrito();
+                }
+            }
+
+            function finalizarCompra() {
+                let carrito = JSON.parse(localStorage.getItem("carritoMavs")) || [];
+                if (carrito.length === 0) {
+                    alert("Tu carrito está vacío.");
+                    return;
+                }
+
+                let totalCuenta = 0;
+                let lineasProductos = "";
+
+                carrito.forEach(item => {
+                    lineasProductos += "<tr><td style='padding:5px;'>" + item.nombre + "</td><td style='text-align:right; padding:5px;'>$" + item.precio + ".00</td></tr>";
+                    totalCuenta += item.precio;
+                });
+
+                const folio = Math.floor(Math.random() * 90000) + 10000;
+                const fechaActual = new Date().toLocaleString();
+
+                const ventanaTicket = window.open("", "_blank", "width=400,height=600");
+                ventanaTicket.document.write(`
+                    <html>
+                    <head>
+                        <title>Ticket de Compra - Mavs Hats</title>
+                        <style>
+                            body { font-family: 'Courier New', Courier, monospace; padding: 20px; color: #000; }
+                            .ticket-container { width: 100%; max-width: 300px; margin: 0 auto; }
+                            .centro { text-align: center; }
+                            .linea { border-bottom: 1px dashed #000; margin: 10px 0; }
+                            table { width: 100%; border-collapse: collapse; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="ticket-container">
+                            <h2 class="centro">MAVS HATS</h2>
+                            <p class="centro">¡Estilo Premium en tu cabeza!<br>México Central</p>
+                            <div class="linea"></div>
+                            <p><strong>Folio:</strong> #\${folio}<br><strong>Fecha:</strong> \${fechaActual}</p>
+                            <div class="linea"></div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:left;">Prod</th>
+                                        <th style="text-align:right;">Precio</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    \${lineasProductos}
+                                </tbody>
+                            </table>
+                            <div class="linea"></div>
+                            <h3 style="display:flex; justify-content:space-between;"><span>TOTAL:</span> <span>\$\${totalCuenta}.00</span></h3>
+                            <div class="linea"></div>
+                            <p class="centro" style="margin-top:30px;">¡Gracias por tu preferencia!<br>Mavs Hats 2026</p>
+                        </div>
+                        <script>
+                            window.onload = function() {
+                                window.print();
+                                window.close();
+                            }
+                        <\/script>
+                    </body>
+                    </html>
+                `);
+                ventanaTicket.document.close();
+
+                localStorage.removeItem("carritoMavs");
+                actualizarContadorInterfaz();
+                cerrarCarrito();
+            }
+        </script>
+    </body>
+</html>
