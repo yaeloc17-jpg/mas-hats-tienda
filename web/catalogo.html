@@ -5,15 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Mavs Hats | Tienda Oficial</title>
 
-        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-        <script>
-            const SUPABASE_URL = "https://dpgziiyypwcpemkqnpyj.supabase.co"; 
-            const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwZ3ppaXl5cHdjcGVta3FucHlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1MDQ1MjMsImV4cCI6MjA5ODA4MDUyM30.YW2aRHmMW_G0Rc4qKm578KoBpimIjDGDXg-XOC_uj5Q";
-            
-            const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        </script>
-
         <style>
             /* --- VARIABLES DE DISEÑO --- */
             :root {
@@ -43,7 +34,7 @@
                 justify-content: space-between;
                 align-items: center;
                 box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-                flex-wrap: wrap; /* Soporte responsivo celular */
+                flex-wrap: wrap;
             }
 
             .logo {
@@ -320,7 +311,6 @@
                 100% { opacity: 1; }
             }
 
-            /* --- MEDIA QUERY CELULARES --- */
             @media (max-width: 768px) {
                 header {
                     flex-direction: column;
@@ -723,7 +713,7 @@
 
         <script>
             // 1. INICIALIZAR EL INVENTARIO AHORA PARA LAS 24 GORRAS COMPLETAS
-            if (!localStorage.getItem("inventarioMavs")) {
+if (!localStorage.getItem("inventarioMavs")) {
                 const stockInicial = {};
                 for (let i = 1; i <= 34; i++) {
                     stockInicial["gorra" + i] = 20;
@@ -744,11 +734,9 @@
                 }
             });
 
-            // 2. AGREGAR AL CARRITO (TOTALMENTE BLINDADA PARA LAS 33 GORRAS)
             function agregarAlCarrito(idGorra, nombreProducto, precio) {
                 let inventario = JSON.parse(localStorage.getItem("inventarioMavs"));
 
-                // --- PARCHE MÁGICO: Si el inventario existe pero le falta esta gorra nueva, agrégala con 20 de stock de inmediato
                 if (inventario && inventario[idGorra] === undefined) {
                     inventario[idGorra] = 20;
                     localStorage.setItem("inventarioMavs", JSON.stringify(inventario));
@@ -764,36 +752,29 @@
                     return;
                 }
 
-                // Restar stock
                 inventario[idGorra] -= 1;
                 localStorage.setItem("inventarioMavs", JSON.stringify(inventario));
 
-                // Guardar en carrito
                 let carrito = JSON.parse(localStorage.getItem("carritoMavs")) || [];
                 carrito.push({id: idGorra, nombre: nombreProducto, precio: precio});
                 localStorage.setItem("carritoMavs", JSON.stringify(carrito));
 
-                // Actualizar interfaz
                 actualizarContadorInterfaz();
                 actualizarVisibilidadStock();
 
                 alert("¡Añadido! " + nombreProducto + " listo en tu carrito.");
             }
 
-            // 3. MOSTRAR STOCK SEGURO SIN AFECTAR LOS FILTROS
             function actualizarVisibilidadStock() {
                 let inventario = JSON.parse(localStorage.getItem("inventarioMavs"));
-                if (!inventario)
-                    return;
+                if (!inventario) return;
 
                 for (let id in inventario) {
                     const badge = document.getElementById("badge-" + id);
                     const boton = document.getElementById("btn-" + id);
                     const cant = inventario[id];
 
-                    // Si la categoría ocultó la tarjeta o no existe el ID, no rompemos el bucle
-                    if (!badge || !boton)
-                        continue;
+                    if (!badge || !boton) continue;
 
                     if (cant === 0) {
                         badge.innerText = "Agotado";
@@ -817,7 +798,6 @@
                 }
             }
 
-            // 4. FUNCIÓN PARA FILTRAR CATEGORÍAS (REPARADA)
             function filtrar(categoria) {
                 const tarjetas = document.querySelectorAll(".grid-productos .card");
                 const tituloCategoria = document.getElementById("nombre-categoria");
@@ -838,15 +818,13 @@
                     }
                 });
 
-                // Reaplica los estilos de stocks sobre los elementos que quedaron visibles
                 actualizarVisibilidadStock();
             }
 
             function actualizarContadorInterfaz() {
                 let carrito = JSON.parse(localStorage.getItem("carritoMavs")) || [];
                 const contador = document.getElementById("contador-carrito");
-                if (contador)
-                    contador.innerText = carrito.length;
+                if (contador) contador.innerText = carrito.length;
             }
 
             function abrirCarrito() {
@@ -874,9 +852,9 @@
                 modal.style.display = "flex";
             }
 
+            // Cerrar haciendo clic fuera del cuadro blanco
             document.getElementById("mi-carrito-modal").addEventListener("click", function (e) {
-                if (e.target === this)
-                    cerrarCarrito();
+                if (e.target === this) cerrarCarrito();
             });
 
             function cerrarCarrito() {
@@ -904,74 +882,74 @@
             }
 
             function finalizarCompra() {
-    let carrito = JSON.parse(localStorage.getItem("carritoMavs")) || [];
-    if (carrito.length === 0) {
-        alert("Tu carrito está vacío.");
-        return;
-    }
-
-    let totalCuenta = 0;
-    let lineasProductos = "";
-
-    carrito.forEach(item => {
-        lineasProductos += "<tr><td style='padding:5px;'>" + item.nombre + "</td><td style='text-align:right; padding:5px;'>$" + item.precio + ".00</td></tr>";
-        totalCuenta += item.precio;
-    });
-
-    const folio = Math.floor(Math.random() * 90000) + 10000;
-    const fechaActual = new Date().toLocaleString();
-
-    const ventanaTicket = window.open("", "_blank", "width=400,height=600");
-    ventanaTicket.document.write(`
-        <html>
-        <head>
-            <title>Ticket de Compra - Mavs Hats</title>
-            <style>
-                body { font-family: 'Courier New', Courier, monospace; padding: 20px; color: #000; }
-                .ticket-container { width: 100%; max-width: 300px; margin: 0 auto; }
-                .centro { text-align: center; }
-                .linea { border-bottom: 1px dashed #000; margin: 10px 0; }
-                table { width: 100%; border-collapse: collapse; }
-            </style>
-        </head>
-        <body>
-            <div class="ticket-container">
-                <h2 class="centro">MAVS HATS</h2>
-                <p class="centro">¡Estilo Premium en tu cabeza!<br>México Central</p>
-                <div class="linea"></div>
-                <p><strong>Folio:</strong> #${folio}<br><strong>Fecha:</strong> ${fechaActual}</p>
-                <div class="linea"></div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="text-align:left;">Prod</th>
-                            <th style="text-align:right;">Precio</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${lineasProductos}
-                    </tbody>
-                </table>
-                <div class="linea"></div>
-                <h3 style="display:flex; justify-content:space-between;"><span>TOTAL:</span> <span>$${totalCuenta}.00</span></h3>
-                <div class="linea"></div>
-                <p class="centro" style="margin-top:30px;">¡Gracias por tu preferencia!<br>Mavs Hats 2026</p>
-            </div>
-            <script>
-                window.onload = function() {
-                    window.print();
-                    window.close();
+                let carrito = JSON.parse(localStorage.getItem("carritoMavs")) || [];
+                if (carrito.length === 0) {
+                    alert("Tu carrito está vacío.");
+                    return;
                 }
-            <\/script>
-        </body>
-        </html>
-    `);
-    ventanaTicket.document.close();
 
-    localStorage.removeItem("carritoMavs");
-    actualizarContadorInterfaz();
-    cerrarCarrito();
-}
+                let totalCuenta = 0;
+                let lineasProductos = "";
+
+                carrito.forEach(item => {
+                    lineasProductos += "<tr><td style='padding:5px;'>" + item.nombre + "</td><td style='text-align:right; padding:5px;'>$" + item.precio + ".00</td></tr>";
+                    totalCuenta += item.precio;
+                });
+
+                const folio = Math.floor(Math.random() * 90000) + 10000;
+                const fechaActual = new Date().toLocaleString();
+
+                const ventanaTicket = window.open("", "_blank", "width=400,height=600");
+                ventanaTicket.document.write(`
+                    <html>
+                    <head>
+                        <title>Ticket de Compra - Mavs Hats</title>
+                        <style>
+                            body { font-family: 'Courier New', Courier, monospace; padding: 20px; color: #000; }
+                            .ticket-container { width: 100%; max-width: 300px; margin: 0 auto; }
+                            .centro { text-align: center; }
+                            .linea { border-bottom: 1px dashed #000; margin: 10px 0; }
+                            table { width: 100%; border-collapse: collapse; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="ticket-container">
+                            <h2 class="centro">MAVS HATS</h2>
+                            <p class="centro">¡Estilo Premium en tu cabeza!<br>México Central</p>
+                            <div class="linea"></div>
+                            <p><strong>Folio:</strong> #${folio}<br><strong>Fecha:</strong> ${fechaActual}</p>
+                            <div class="linea"></div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:left;">Prod</th>
+                                        <th style="text-align:right;">Precio</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    \${lineasProductos}
+                                </tbody>
+                            </table>
+                            <div class="linea"></div>
+                            <h3 style="display:flex; justify-content:space-between;"><span>TOTAL:</span> <span>$\${totalCuenta}.00</span></h3>
+                            <div class="linea"></div>
+                            <p class="centro" style="margin-top:30px;">¡Gracias por tu preferencia!<br>Mavs Hats 2026</p>
+                        </div>
+                        <script>
+                            window.onload = function() {
+                                window.print();
+                                window.close();
+                            }
+                        <\/script>
+                    </body>
+                    </html>
+                `);
+                ventanaTicket.document.close();
+
+                localStorage.removeItem("carritoMavs");
+                actualizarContadorInterfaz();
+                cerrarCarrito();
+            }
         </script>
     </body>
 </html>
