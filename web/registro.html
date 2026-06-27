@@ -25,14 +25,13 @@
                 height: 100vh;
             }
 
-            /* --- CONTENEDOR DEL FORMULARIO --- */
             .registro-container {
                 background-color: var(--blanco);
                 padding: 40px;
                 width: 100%;
                 max-width: 400px;
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-                border-top: 5px solid var(--dorado); /* Detalle elegante arriba */
+                border-top: 5px solid var(--dorado);
                 text-align: center;
             }
 
@@ -51,7 +50,6 @@
                 margin-bottom: 30px;
             }
 
-            /* --- ESTILO DE LOS CAMPOS --- */
             .input-group {
                 margin-bottom: 20px;
                 text-align: left;
@@ -83,7 +81,6 @@
                 outline: none;
             }
 
-            /* --- BOTÓN DE ACCIÓN --- */
             .btn-registrar {
                 background-color: var(--negro-pro);
                 color: var(--blanco);
@@ -104,7 +101,6 @@
                 color: var(--negro-pro);
             }
 
-            /* --- ENLACES --- */
             .enlace-login {
                 margin-top: 25px;
                 font-size: 0.9rem;
@@ -130,16 +126,20 @@
             <div class="logo">Mavs Hats</div>
             <div class="subtitulo">Únete al club de las gorras premium</div>
 
-<form action="RegistrarUsuarioServlet" method="POST">
-    
-    <label>Correo Electrónico:</label>
-    <input type="email" name="txtCorreo" required>
-    
-    <label>Contraseña:</label>
-    <input type="password" name="txtPassword" required>
-    
-    <button type="submit">Registrarse</button>
-</form>
+            <form action="RegistrarUsuarioServlet" method="POST">
+                
+                <div class="input-group">
+                    <label>Correo Electrónico:</label>
+                    <input type="email" name="txtCorreo" required>
+                </div>
+                
+                <div class="input-group">
+                    <label>Contraseña:</label>
+                    <input type="password" name="txtPassword" required>
+                </div>
+                
+                <button type="submit" class="btn-registrar">Registrarse</button>
+            </form>
 
             <div class="enlace-login">
                 ¿Ya tienes una cuenta? <a href="login.jsp">Inicia sesión aquí</a>
