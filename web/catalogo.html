@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Mavs Hats | Tienda Oficial</title>
-        <style>
-            const SUPABASE_URL = "https://dpgziiyypwcpemkqnpyj.supabase.co/rest/v1/"; 
+
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+        <script>
+            const SUPABASE_URL = "https://dpgziiyypwcpemkqnpyj.supabase.co"; 
             const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwZ3ppaXl5cHdjcGVta3FucHlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1MDQ1MjMsImV4cCI6MjA5ODA4MDUyM30.YW2aRHmMW_G0Rc4qKm578KoBpimIjDGDXg-XOC_uj5Q";
+            
             const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        </script>
+
+        <style>
             /* --- VARIABLES DE DISEÑO --- */
             :root {
                 --negro-pro: #1a1a1a;
@@ -37,6 +43,7 @@
                 justify-content: space-between;
                 align-items: center;
                 box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+                flex-wrap: wrap; /* Soporte responsivo celular */
             }
 
             .logo {
@@ -45,6 +52,7 @@
                 letter-spacing: 2px;
                 color: var(--dorado);
                 text-transform: uppercase;
+                margin-bottom: 10px;
             }
 
             nav ul {
@@ -52,10 +60,9 @@
                 display: flex;
                 margin: 0;
                 padding: 0;
-            }
-
-            nav ul li {
-                margin-left: 20px;
+                flex-wrap: wrap; 
+                justify-content: center;
+                gap: 15px;
             }
 
             nav ul li a {
@@ -191,7 +198,6 @@
                 margin-top: 60px;
             }
 
-            /* Clase para filtrar */
             .hidden {
                 display: none !important;
             }
@@ -282,6 +288,7 @@
                 font-weight: bold;
                 text-transform: uppercase;
             }
+
             .badge-stock {
                 display: inline-block;
                 padding: 3px 8px;
@@ -290,108 +297,69 @@
                 border-radius: 3px;
                 margin-bottom: 8px;
             }
+
             .stock-disponible {
                 background-color: #e8f8f5;
                 color: #27ae60;
             }
+
             .stock-critico {
                 background-color: #fdedec;
                 color: #e74c3c;
                 animation: pulse 1.5s infinite;
             }
+
             .stock-agotado {
                 background-color: #f2f4f4;
                 color: #7f8c8d;
             }
 
             @keyframes pulse {
-                0% {
-                    opacity: 1;
+                0% { opacity: 1; }
+                50% { opacity: 0.6; }
+                100% { opacity: 1; }
+            }
+
+            /* --- MEDIA QUERY CELULARES --- */
+            @media (max-width: 768px) {
+                header {
+                    flex-direction: column;
+                    padding: 15px;
                 }
-                50% {
-                    opacity: 0.6;
+                nav ul li a {
+                    font-size: 0.8rem;
                 }
-                100% {
-                    opacity: 1;
+                .hero h1 {
+                    font-size: 2rem;
                 }
             }
-            header {
-        background-color: var(--negro-pro);
-        color: var(--blanco);
-        padding: 1rem 5%;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        flex-wrap: wrap; 
-    }
-
-    .logo {
-        font-size: 1.5rem;
-        font-weight: bold;
-        letter-spacing: 2px;
-        color: var(--dorado);
-        text-transform: uppercase;
-        margin-bottom: 10px; 
-    }
-
-    nav ul {
-        list-style: none;
-        display: flex;
-        margin: 0;
-        padding: 0;
-        flex-wrap: wrap; 
-        justify-content: center;
-        gap: 15px;
-    }
-
- 
-    @media (max-width: 768px) {
-        header {
-            flex-direction: column; 
-            padding: 15px;
-        }
-
-        nav ul li a {
-            font-size: 0.8rem; 
-        }
-        
-        .hero h1 {
-            font-size: 2rem; 
-        }
-    }
         </style>
     </head>
     <body>
 
-<header>
-    <div class="logo">Mavs Hats</div>
-    <nav>
-        <ul>
-            <li><a onclick="filtrar('todas')">Todas</a></li>
-            <li><a onclick="filtrar('casual')">Casual</a></li>
-            <li><a onclick="filtrar('deportiva')">Deportiva</a></li>
-            <li><a onclick="filtrar('basquetbol')">Basquetbol</a></li>
-            <li><a onclick="filtrar('beisbol')">Beisbol</a></li>
-            <!-- Regresamos tu botón de salir con un margen a la derecha -->
-            <li><a href="login.html" style="color: var(--dorado); text-decoration: none; font-weight: bold;">Salir</a></li>
-            <li>
-                <a id="boton-carrito" href="#" style="background-color: #c5a059; color: #1a1a1a; padding: 5px 12px; font-weight: bold; border-radius: 4px; text-decoration: none;">
-                    🛒 (<span id="contador-carrito">0</span>)
-                </a>
-            </li>
-        </ul>
-    </nav>
-</header>
+        <header>
+            <div class="logo">Mavs Hats</div>
+            <nav>
+                <ul>
+                    <li><a onclick="filtrar('todas')">Todas</a></li>
+                    <li><a onclick="filtrar('casual')">Casual</a></li>
+                    <li><a onclick="filtrar('deportiva')">Deportiva</a></li>
+                    <li><a onclick="filtrar('basquetbol')">Basquetbol</a></li>
+                    <li><a onclick="filtrar('beisbol')">Beisbol</a></li>
+                    <li><a href="login.html" style="color: var(--dorado); text-decoration: none; font-weight: bold;">Salir</a></li>
+                    <li>
+                        <a id="boton-carrito" href="#" style="background-color: #c5a059; color: #1a1a1a; padding: 5px 12px; font-weight: bold; border-radius: 4px; text-decoration: none;">
+                            🛒 (<span id="contador-carrito">0</span>)
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
 
         <section class="hero">
             <h1>MAVS HATS</h1>
             <p>Elegancia y Deporte en tu Cabeza</p>
         </section>
-
         <div class="tienda-container">
             <h2 class="titulo-categoria" id="nombre-categoria">Todas las Gorras</h2>
 
