@@ -37,7 +37,7 @@ public class ValidarLoginServlet extends HttpServlet {
             rs = ps.executeQuery();
             
             if (rs.next()) {
-                response.sendRedirect("catalogo.jsp");
+                response.sendRedirect("catalogo.html");
             } else {
                 out.println("<html><body style='font-family:Arial; text-align:center; padding-top:50px;'>");
                 out.println("<h2 style='color: red;'>Correo o contraseña incorrectos.</h2>");
