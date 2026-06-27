@@ -1,38 +1,157 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>Iniciar Sesión - Gorras</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mavs Hats | Iniciar Sesión</title>
         <style>
-            body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 50px; }
-            .form-login { background: white; padding: 30px; border-radius: 8px; max-width: 400px; margin: 0 auto; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); }
-            .campo { margin-bottom: 15px; }
-            .campo label { display: block; margin-bottom: 5px; font-weight: bold; }
-            .campo input { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-            .btn { background-color: #0078d4; color: white; border: none; padding: 12px; width: 100%; cursor: pointer; font-size: 16px; border-radius: 4px; }
-            .btn:hover { background-color: #005a9e; }
-            .registro-link { text-align: center; margin-top: 20px; font-size: 14px; }
-            .registro-link a { color: #0078d4; text-decoration: none; font-weight: bold; cursor: pointer; }
-            .error-msg { color: #d93025; font-size: 14px; margin-bottom: 15px; display: none; text-align: center; font-weight: bold; }
-            .success-msg { color: #188038; font-size: 14px; margin-bottom: 15px; display: none; text-align: center; font-weight: bold; }
-            .loading { background-color: #555 !important; cursor: not-allowed; }
+            /* --- VARIABLES DE DISEÑO (Combinadas con Catálogo) --- */
+            :root {
+                --negro-pro: #1a1a1a;
+                --dorado: #c5a059;
+                --gris-claro: #f4f4f4;
+                --blanco: #ffffff;
+                --exito: #27ae60;
+                --error: #e74c3c;
+            }
+
+            body { 
+                font-family: 'Poppins', sans-serif; 
+                background-color: var(--gris-claro); 
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+            }
+
+            .form-login { 
+                background: var(--blanco); 
+                padding: 40px; 
+                border: 2px solid var(--dorado);
+                max-width: 400px; 
+                width: 90%;
+                box-shadow: 0px 10px 25px rgba(0,0,0,0.1); 
+            }
+
+            .form-login h2 {
+                text-align: center;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                font-size: 1.5rem;
+                margin-top: 0;
+                margin-bottom: 25px;
+                color: var(--negro-pro);
+            }
+
+            .campo { margin-bottom: 20px; }
+            
+            .campo label { 
+                display: block; 
+                margin-bottom: 8px; 
+                font-weight: bold; 
+                font-size: 0.85rem;
+                text-transform: uppercase;
+                color: #555;
+            }
+
+            .campo input { 
+                width: 100%; 
+                padding: 12px; 
+                box-sizing: border-box; 
+                border: 1px solid #ddd; 
+                border-radius: 0; 
+                font-size: 1rem;
+                transition: 0.3s;
+            }
+
+            .campo input:focus {
+                outline: none;
+                border-color: var(--dorado);
+            }
+
+            .btn { 
+                background-color: var(--negro-pro); 
+                color: white; 
+                border: none; 
+                padding: 14px; 
+                width: 100%; 
+                cursor: pointer; 
+                font-size: 1rem; 
+                font-weight: bold;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                transition: 0.3s; 
+            }
+
+            .btn:hover { 
+                background-color: var(--dorado); 
+                color: var(--negro-pro);
+            }
+
+            .registro-link { 
+                text-align: center; 
+                margin-top: 25px; 
+                font-size: 14px; 
+                color: #666;
+            }
+
+            .registro-link a { 
+                color: var(--dorado); 
+                text-decoration: none; 
+                font-weight: bold; 
+                cursor: pointer; 
+            }
+            
+            .registro-link a:hover {
+                text-decoration: underline;
+            }
+
+            .error-msg { 
+                color: var(--error); 
+                background-color: #fdedec;
+                padding: 10px;
+                font-size: 14px; 
+                margin-bottom: 20px; 
+                display: none; 
+                text-align: center; 
+                font-weight: bold; 
+            }
+
+            .success-msg { 
+                color: var(--exito); 
+                background-color: #e8f8f5;
+                padding: 10px;
+                font-size: 14px; 
+                margin-bottom: 20px; 
+                display: none; 
+                text-align: center; 
+                font-weight: bold; 
+            }
+
+            .loading { 
+                background-color: var(--dorado) !important; 
+                color: var(--negro-pro) !important;
+                cursor: not-allowed; 
+            }
         </style>
     </head>
     <body>
 
         <div class="form-login" id="vistaLogin">
-            <h2 id="tituloForm">Ingresar a la Tienda</h2>
+            <h2 id="tituloForm">Mavs Hats</h2>
             
             <div class="error-msg" id="errorLogin">Correo o contraseña incorrectos.</div>
             <div class="success-msg" id="infoRegistro"></div>
 
             <form onsubmit="procesarLogin(event)">
                 <div class="campo">
-                    <label>Correo Electrónico:</label>
+                    <label>Correo Electrónico</label>
                     <input type="email" id="loginCorreo" required placeholder="ejemplo@correo.com">
                 </div>
                 <div class="campo">
-                    <label>Contraseña:</label>
+                    <label>Contraseña</label>
                     <input type="password" id="loginPassword" required placeholder="******">
                 </div>
                 <button type="submit" id="btnIngresar" class="btn">Ingresar</button>
@@ -44,23 +163,23 @@
         </div>
 
         <div class="form-login" id="vistaRegistro" style="display: none;">
-            <h2>Crear Cuenta Nueva</h2>
+            <h2>Crear Cuenta</h2>
             <div class="error-msg" id="errorRegistro">Este correo ya está registrado.</div>
             
             <form onsubmit="procesarRegistro(event)">
                 <div class="campo">
-                    <label>Nombre Completo:</label>
-                    <input type="text" id="regNombre" required placeholder="">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="regNombre" required placeholder="Tu nombre">
                 </div>
                 <div class="campo">
-                    <label>Correo Electrónico:</label>
+                    <label>Correo Electrónico</label>
                     <input type="email" id="regCorreo" required placeholder="correo@ejemplo.com">
                 </div>
                 <div class="campo">
-                    <label>Contraseña:</label>
+                    <label>Contraseña</label>
                     <input type="password" id="regPassword" required placeholder="Mínimo 6 caracteres">
                 </div>
-                <button type="submit" class="btn" style="background-color: #188038;">Registrarse</button>
+                <button type="submit" class="btn" style="background-color: var(--exito);">Registrarse</button>
             </form>
             
             <div class="registro-link">
@@ -69,7 +188,7 @@
         </div>
 
         <script>
-            // Creamos un usuario Administrador por defecto si la simulación está vacía
+            // Creamos un usuario Administrador por defecto si el LocalStorage está vacío
             if (!localStorage.getItem("admin@gorras.com")) {
                 localStorage.setItem("admin@gorras.com", JSON.stringify({ password: "123", nombre: "Admin" }));
             }
@@ -89,7 +208,7 @@
                 }
             }
 
-            // REGISTRO: Guarda los datos de forma "real" en el navegador
+            // REGISTRO: Guarda los datos de forma local en el navegador
             function procesarRegistro(event) {
                 event.preventDefault();
                 const correo = document.getElementById("regCorreo").value.trim().toLowerCase();
@@ -102,7 +221,7 @@
                     return;
                 }
 
-                // Guardar en la "Base de Datos" del navegador
+                // Guardar en la "Base de Datos" local del navegador
                 const datosUsuario = { password: password, nombre: nombre };
                 localStorage.setItem(correo, JSON.stringify(datosUsuario));
 
@@ -114,12 +233,12 @@
                 mostrarRegistro(false);
                 
                 const msg = document.getElementById("infoRegistro");
-                msg.innerText = "¡Cuenta registrada con éxito! Ya puedes iniciar sesión.";
+                msg.innerText = "¡Cuenta registrada! Ya puedes iniciar sesión.";
                 msg.style.display = "block";
                 document.getElementById("loginCorreo").value = correo;
             }
 
-            // LOGIN: Valida contra la "Base de Datos" simulada
+            // LOGIN: Valida contra la simulación local de base de datos
             function procesarLogin(event) {
                 event.preventDefault();
                 document.getElementById("errorLogin").style.display = "none";
@@ -128,7 +247,7 @@
                 const correo = document.getElementById("loginCorreo").value.trim().toLowerCase();
                 const password = document.getElementById("loginPassword").value;
 
-                // Buscar usuario en la base de datos simulada
+                // Buscar usuario en LocalStorage
                 const usuarioGuardado = localStorage.getItem(correo);
 
                 if (usuarioGuardado) {
@@ -137,11 +256,11 @@
                     // Validar contraseña exacta
                     if (datos.password === password) {
                         const boton = document.getElementById("btnIngresar");
-                        boton.innerText = "Conectando con el servidor...";
+                        boton.innerText = "Validando Credenciales...";
                         boton.classList.add("loading");
                         boton.disabled = true;
 
-                        // Retraso de 1.2 segundos para simular respuesta del servidor
+                        // Retraso de 1.2 segundos para simular respuesta del servidor de forma estética
                         setTimeout(() => {
                             window.location.href = "catalogo.html";
                         }, 1200);
@@ -149,7 +268,7 @@
                     }
                 }
 
-                // Si no existe o la contraseña está mal
+                // Si no existe o los datos están mal
                 document.getElementById("errorLogin").style.display = "block";
             }
         </script>
